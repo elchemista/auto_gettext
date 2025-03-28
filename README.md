@@ -1,6 +1,8 @@
 # AutoGettext
 
-**TODO: Add description**
+This library provides functions to translate Gettext `.po` files using various LLM providers,
+such as OpenAI, Google Gemini, or others. It aims to automate the translation process,
+reducing the manual effort required for localization.
 
 ## Installation
 
