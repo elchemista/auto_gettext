@@ -1,18 +1,16 @@
 defmodule AutoGettext do
   @moduledoc """
   Documentation for `AutoGettext`.
+
+  This module can house shared logic, configuration, or helper functions
+  that other modules in your library depend on.
   """
+end
 
-  @doc """
-  Hello world.
+defmodule AutoGettext.DefaultTranslator do
+  @behaviour AutoGettext.Translator
 
-  ## Examples
-
-      iex> AutoGettext.hello()
-      :world
-
-  """
-  def hello do
-    :world
+  def batch_translate(msgids, _locale) do
+    for msgid <- msgids, do: {msgid, "PLACEHOLDER_#{msgid}"}
   end
 end

@@ -12,6 +12,8 @@
 
 /.elixir_ls/
 
+/priv/
+
 .env
 
 # If the VM crashes, it generates a dump, let's ignore it too.
