@@ -10,6 +10,10 @@
 # Where third-party dependencies like ExDoc output generated docs.
 /doc/
 
+/.elixir_ls/
+
+.env
+
 # If the VM crashes, it generates a dump, let's ignore it too.
 erl_crash.dump
 
