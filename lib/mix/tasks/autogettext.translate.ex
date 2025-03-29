@@ -66,8 +66,8 @@ defmodule Mix.Tasks.Autogettext.Translate do
   end
 
   defp extract_locale(file_path) do
-    case Regex.run(~r{gettext/([^/]+)/}, file_path) do
-      [_, loc] -> loc
+    case Regex.run(~r{priv/[^/]+/([^/]+)/}, file_path) do
+      [_, locale] -> locale
       _ -> "unknown"
     end
   end
