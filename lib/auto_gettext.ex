@@ -20,7 +20,12 @@ defmodule AutoGettext do
 
     Path.join(root, "**/*.po")
     |> Path.wildcard()
-    |> Task.async_stream(&POFile.translate!(&1, translator), max_concurrency: 4, ordered: false)
+    |> Task.async_stream(
+      &POFile.translate!(&1, translator),
+      max_concurrency: 4,
+      ordered: false,
+      timeout: :infinity
+    )
     |> Stream.run()
 
     :ok
