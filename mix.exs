@@ -50,7 +50,7 @@ defmodule AutoGettext.MixProject do
     [
       {:gettext, "~> 0.24"},
       {:jason, "~> 1.4"},
-      {:httpoison, "~> 2.2"},
+      {:httpoison, "~> 2.0"},
       {:ex_doc, "~> 0.34", only: :dev, runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.18", only: :test}
