@@ -1,8 +1,6 @@
-# behaviour
-defmodule AutoGettext.Api do
+defmodule AutoGettext.API do
   @moduledoc """
-  Documentation for `AutoGettext.Api`.
+  Behaviour for a module that actually talks to an LLM or external service.
   """
-
-  @callback get(String.t()) :: String.t()
+  @callback get(String.t()) :: String.t() | no_return()
 end
