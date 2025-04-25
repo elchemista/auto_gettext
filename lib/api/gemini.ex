@@ -15,7 +15,7 @@ defmodule AutoGettext.API.Gemini do
   def get(prompt) when is_binary(prompt) do
     key =
       System.get_env("GOOGLE_API_KEY") ||
-        raise "GOOGLE_API_KEY not set – cannot contact Gemini."
+        raise "GOOGLE_API_KEY not set - cannot contact Gemini."
 
     body =
       %{
