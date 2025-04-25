@@ -1,23 +1,28 @@
 defmodule AutoGettext.PO.Parser do
   @moduledoc """
-  Minimal PO-snippet parser used to extract `msgid`⇢`msgstr` pairs from the
-  AI response.
+  Loose parser: grabs every msgid/msgstr in sequence from the AI response.
   """
-
-  @pair ~r/msgid\s+"(?<id>(?:\\.|[^"])*)"\s*msgstr\s+"(?<tr>(?:\\.|[^"])*)"/
 
   @spec parse(String.t()) :: {:ok, [{String.t(), String.t()}]} | {:error, :no_matches}
   def parse(text) do
-    captures =
-      Regex.scan(@pair, text, capture: :all_but_first, trim: true)
-      |> Enum.map(fn [id, tr] -> {unescape(id), unescape(tr)} end)
+    ids =
+      Regex.scan(~r/msgid\s+"([^"]*)"/, text, capture: :all_but_first)
+      |> List.flatten()
 
-    if captures == [], do: {:error, :no_matches}, else: {:ok, captures}
+    trs =
+      Regex.scan(~r/msgstr\s+"([^"]*)"/, text, capture: :all_but_first)
+      |> List.flatten()
+
+    pairs = Enum.zip(ids, trs)
+
+    if pairs == [],
+      do: {:error, :no_matches},
+      else: {:ok, Enum.map(pairs, fn {id, tr} -> {unescape(id), unescape(tr)} end)}
   end
 
   defp unescape(str) do
     str
-    |> String.replace(~S(\"), ~s("))
+    |> String.replace(~S(\"), ~s(\"))
     |> String.replace(~S(\\n), "\n")
   end
 end

@@ -20,10 +20,17 @@ defmodule Mix.Tasks.AutoGettext.TranslateTest do
   end
 
   test "fills missing strings", %{po: po} do
-    # deterministic stub used by the Mix task
+    # deterministic stub used by the Mix task; now works with raw PO snippets
     defmodule Stub do
       @behaviour AutoGettext.Translator
-      def batch_translate(ids, _locale), do: for(id <- ids, do: {id, "Hola"})
+      def batch_translate(snippets, _locale) do
+        Enum.map(snippets, fn snippet ->
+          case Regex.run(~r/msgid\s+"([^"]+)"/, snippet) do
+            [_, id] -> {id, "Hola"}
+            _ -> {snippet, "Hola"}
+          end
+        end)
+      end
     end
 
     Application.put_env(:auto_gettext, :translator_module, Stub)
