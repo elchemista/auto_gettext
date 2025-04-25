@@ -4,11 +4,39 @@ defmodule AutoGettext.MixProject do
   def project do
     [
       app: :auto_gettext,
+      name: "AutoGettext",
       version: "0.1.0",
       elixir: "~> 1.16",
       deps: deps(),
       test_coverage: [tool: ExCoveralls],
-      preferred_cli_env: [coveralls: :test]
+      preferred_cli_env: [coveralls: :test],
+      description: description(),
+      package: package(),
+      docs: [
+        master: "readme",
+        extras: [
+          "README.md",
+          "LICENSE"
+        ]
+      ],
+      source_url: "https://github.com/elchemista/auto_gettext",
+      homepage_url: "https://github.com/elchemista/auto_gettext"
+    ]
+  end
+
+  defp description() do
+    "Automatic gettext translations for Elixir projects using LLMs Services (OpenAI, Google, etc.)"
+  end
+
+  defp package() do
+    [
+      name: "auto_gettext",
+      maintainers: ["Yuriy Zhar"],
+      files: ~w(mix.exs README.md lib test LICENSE .formatter.exs),
+      licenses: ["Apache-2.0"],
+      links: %{
+        "GitHub" => "https://github.com/elchemista/auto_gettext"
+      }
     ]
   end
 
