@@ -29,7 +29,7 @@ end
 ```elixir
 config :auto_gettext,
   api_module: AutoGettext.API.Gemini,
-  translator_module: AutoGettext.AITranslator,
+  translator_module: AutoGettext.GeminiTranslator,
   gemini_model: "gemini-2.0-flash",
   prompt_template_po: "...override prompt…"
 ```

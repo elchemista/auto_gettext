@@ -6,6 +6,8 @@ defmodule AutoGettext do
       :ok
   """
 
+  require Logger
+
   alias AutoGettext.GeminiTranslator
   alias AutoGettext.PO.File, as: POFile
 
@@ -21,10 +23,20 @@ defmodule AutoGettext do
     Path.join(root, "**/*.po")
     |> Path.wildcard()
     |> Task.async_stream(
-      &POFile.translate!(&1, translator),
+      fn file ->
+        try do
+          POFile.translate!(file, translator)
+          :ok
+        rescue
+          e in [HTTPoison.Error] ->
+            Logger.error("#{file} - #{inspect(e)}")
+            :error
+        end
+      end,
       max_concurrency: 4,
       ordered: false,
-      timeout: :infinity
+      timeout: 500_000,
+      on_timeout: :kill_task
     )
     |> Stream.run()
 
