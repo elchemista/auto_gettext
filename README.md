@@ -17,7 +17,7 @@ Add `auto_gettext` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:auto_gettext, "~> 0.1.0"}
+    {:auto_gettext, "~> 0.1.0", github: "elchemista/auto_gettext", only: :dev}
   ]
 end
 ```
