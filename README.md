@@ -34,8 +34,6 @@ config :auto_gettext,
   ignored_locales: ["en"],
   prompt_template: "...override prompt…",
   prompt_context: "Our product is a developer tool",
-  openai_api_key: System.get_env("OPENAI_API_KEY"),
-  openai_model: "gpt-4o-mini"
 ```
 
 `api_key` is required by the bundled Gemini adapter. If you prefer to keep the
