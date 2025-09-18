@@ -20,7 +20,7 @@ defmodule AutoGettext.PO.File do
         missing_ids
         |> Enum.map(fn id -> ~s(msgid "#{id}"\nmsgstr "") end)
 
-      locale = locale_from_path(file)
+      locale = locale(file)
 
       case translator.batch_translate(snippets, locale) do
         :no_translations ->
@@ -86,7 +86,11 @@ defmodule AutoGettext.PO.File do
   defp maybe_replace(_line, ""), do: "msgstr \"\"\n"
   defp maybe_replace(_line, tr), do: ~s(msgstr "#{tr}"\n)
 
-  defp locale_from_path(path) do
+  @doc """
+  Derives the locale directory from a `.po` file path.
+  """
+  @spec locale(Path.t()) :: String.t()
+  def locale(path) do
     case Regex.run(~r{priv/[^/]+/([^/]+)/}, path) do
       [_, loc] -> loc
       _ -> "unknown"

@@ -20,8 +20,18 @@ defmodule AutoGettext do
     translator =
       Application.get_env(:auto_gettext, :translator_module, GeminiTranslator)
 
+    ignored_locales =
+      :auto_gettext
+      |> Application.get_env(:ignored_locales, [])
+      |> Enum.map(&to_string/1)
+      |> MapSet.new()
+
     Path.join(root, "**/*.po")
     |> Path.wildcard()
+    |> Enum.reject(fn file ->
+      locale = POFile.locale(file)
+      locale != "unknown" and MapSet.member?(ignored_locales, locale)
+    end)
     |> Task.async_stream(
       fn file ->
         try do

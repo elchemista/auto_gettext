@@ -1,6 +1,13 @@
 defmodule AutoGettext.Translator do
   @moduledoc """
-  Behaviour for batch translation engines. Implement `c:batch_translate/2`.
+  Behaviour implemented by modules that AutoGettext can delegate translations to.
+
+  A translator receives a list of PO-formatted snippets (each containing a
+  `msgid`/`msgstr` pair) alongside the locale that is being processed. Returned
+  values are used to patch the original `.po` files.
+
+  You can provide your own translator by setting the `:translator_module`
+  configuration key under the `:auto_gettext` application environment.
   """
 
   @typedoc "Pairs of {msgid, translated_msgstr}"

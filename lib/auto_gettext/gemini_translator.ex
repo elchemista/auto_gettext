@@ -4,7 +4,7 @@ defmodule AutoGettext.GeminiTranslator do
   """
 
   @behaviour AutoGettext.Translator
-  alias AutoGettext.{PO.Parser, API}
+  alias AutoGettext.PO.Parser
 
   @default_prompt """
   You are an i18n assistant. Translate each PO snippet into **{{locale}}**.
@@ -18,13 +18,20 @@ defmodule AutoGettext.GeminiTranslator do
   def batch_translate([], _loc), do: []
 
   def batch_translate(snippets, locale) do
-    api = Application.get_env(:auto_gettext, :api_module, API.Gemini)
+    api = Application.get_env(:auto_gettext, :api_service, AutoGettext.API.Gemini)
+
+    base_prompt =
+      Application.get_env(:auto_gettext, :prompt_template, @default_prompt)
+      |> String.replace("{{locale}}", locale)
+
+    context =
+      Application.get_env(:auto_gettext, :prompt_context)
+      |> to_prompt_context(locale)
 
     prompt =
-      Application.get_env(:auto_gettext, :prompt_template_po, @default_prompt)
-      |> String.replace("{{locale}}", locale)
-      |> Kernel.<>("\n\n")
-      |> Kernel.<>(Enum.join(snippets, "\n\n"))
+      [base_prompt, context, Enum.join(snippets, "\n\n")]
+      |> Enum.reject(&(&1 in [nil, ""]))
+      |> Enum.join("\n\n")
 
     with raw when is_binary(raw) <- api.get(prompt),
          cleaned = sanitize(raw),
@@ -32,6 +39,18 @@ defmodule AutoGettext.GeminiTranslator do
       pairs
     else
       _ -> :no_translations
+    end
+  end
+
+  defp to_prompt_context(nil, _locale), do: nil
+
+  defp to_prompt_context(context, locale) do
+    context
+    |> to_string()
+    |> String.trim()
+    |> case do
+      "" -> nil
+      txt -> String.replace(txt, "{{locale}}", locale)
     end
   end
 

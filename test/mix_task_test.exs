@@ -19,6 +19,11 @@ defmodule Mix.Tasks.AutoGettext.TranslateTest do
     {:ok, po: po}
   end
 
+  setup do
+    Application.put_env(:auto_gettext, :ignored_locales, [])
+    :ok
+  end
+
   test "fills missing strings", %{po: po} do
     # deterministic stub used by the Mix task; now works with raw PO snippets
     defmodule Stub do
@@ -40,5 +45,33 @@ defmodule Mix.Tasks.AutoGettext.TranslateTest do
     end)
 
     assert File.read!(po) =~ ~r/msgstr\s+"Hola"/
+
+    Application.delete_env(:auto_gettext, :translator_module)
+  end
+
+  test "skips locales configured to be ignored", %{po: _po} do
+    File.mkdir_p!("#{@tmp}/priv/gettext/en/LC_MESSAGES")
+    en_po = "#{@tmp}/priv/gettext/en/LC_MESSAGES/default.po"
+
+    File.write!(en_po, """
+    msgid "Hi"
+    msgstr ""
+    """)
+
+    defmodule SkipStub do
+      @behaviour AutoGettext.Translator
+      def batch_translate(_snippets, _locale), do: [{"Hi", "Hello"}]
+    end
+
+    Application.put_env(:auto_gettext, :translator_module, SkipStub)
+    Application.put_env(:auto_gettext, :ignored_locales, ["en"])
+
+    capture_io(fn ->
+      Mix.Tasks.AutoGettext.Translate.run([@tmp <> "/priv/gettext"])
+    end)
+
+    assert File.read!(en_po) =~ ~r/msgstr\s+""/
+    Application.delete_env(:auto_gettext, :translator_module)
+    Application.delete_env(:auto_gettext, :ignored_locales)
   end
 end

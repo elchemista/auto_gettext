@@ -1,6 +1,6 @@
 defmodule Mix.Tasks.AutoGettext.Translate do
   use Mix.Task
-  @shortdoc "Auto-translate missing msgstr in .po files."
+  @shortdoc "Auto-translate using LLM the missing msgstr in .po files."
 
   @impl true
   def run(args) do

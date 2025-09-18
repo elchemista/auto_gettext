@@ -1,21 +1,23 @@
 defmodule AutoGettext.API.Gemini do
   @moduledoc """
   Thin wrapper around Google Gemini *chat* completions that implements
-  `AutoGettext.API`.
+  `AutoGettext.APIService`.
 
-  It expects `GOOGLE_API_KEY` in the environment (same var the official SDK
-  uses) and returns **only the assistant’s `content` string**.
+  The API key is read from `Application.get_env(:auto_gettext, :api_key)` and
+  falls back to the `GOOGLE_API_KEY` env var for backwards compatibility.
+  The function returns **only the assistant’s `content` string**.
   """
 
-  @behaviour AutoGettext.API
+  @behaviour AutoGettext.APIService
   require Logger
   @url "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
 
   @impl true
   def get(prompt) when is_binary(prompt) do
     key =
-      System.get_env("GOOGLE_API_KEY") ||
-        raise "GOOGLE_API_KEY not set - cannot contact Gemini."
+      Application.get_env(:auto_gettext, :api_key) ||
+        System.get_env("GOOGLE_API_KEY") ||
+        raise "Gemini API key not configured - set :api_key or GOOGLE_API_KEY."
 
     body =
       %{

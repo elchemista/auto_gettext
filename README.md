@@ -25,12 +25,17 @@ end
 
 ## Configuration
 
-**Required**: `GOOGLE_API_KEY` env var.
-
 ```elixir
 config :auto_gettext,
-  api_module: AutoGettext.API.Gemini,
+  api_service: AutoGettext.API.Gemini,
+  api_key: System.get_env("GOOGLE_API_KEY"),
   translator_module: AutoGettext.GeminiTranslator,
   gemini_model: "gemini-2.0-flash",
-  prompt_template_po: "...override prompt…"
+  ignored_locales: ["en"],
+  prompt_template: "...override prompt…",
+  prompt_context: "Our product is a developer tool"
 ```
+
+`api_key` is required by the bundled Gemini adapter. If you prefer to keep the
+credential outside of the config you can leave it as `nil` and rely on the
+`GOOGLE_API_KEY` environment variable instead.
