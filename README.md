@@ -4,6 +4,8 @@ Batteries-included Mix task that scans your `priv/gettext/**/*.po`, detects
 empty `msgstr ""`, asks an LLM for translations, and writes the results back.
 
 ```bash
+# don't forget to: export GOOGLE_API_KEY=""
+$ source .env
 # translate everything using the default Gemini adapter
 $ mix auto_gettext.translate
 # or point it somewhere else
