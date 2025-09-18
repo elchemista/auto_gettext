@@ -1,4 +1,5 @@
 defmodule Mix.Tasks.AutoGettext.TranslateTest do
+  @moduledoc false
   use ExUnit.Case, async: false
   import ExUnit.CaptureIO
 
@@ -27,6 +28,7 @@ defmodule Mix.Tasks.AutoGettext.TranslateTest do
   test "fills missing strings", %{po: po} do
     # deterministic stub used by the Mix task; now works with raw PO snippets
     defmodule Stub do
+      @moduledoc false
       @behaviour AutoGettext.Translator
       def batch_translate(snippets, _locale) do
         Enum.map(snippets, fn snippet ->
@@ -59,6 +61,7 @@ defmodule Mix.Tasks.AutoGettext.TranslateTest do
     """)
 
     defmodule SkipStub do
+      @moduledoc false
       @behaviour AutoGettext.Translator
       def batch_translate(_snippets, _locale), do: [{"Hi", "Hello"}]
     end

@@ -6,6 +6,9 @@ defmodule AutoGettext.APIService do
   Implementations receive the full prompt prepared by a translator and must
   return the raw text produced by the provider. Any error should raise so it can
   be logged by the caller.
+
+  Bundled adapters: `AutoGettext.API.Gemini` for Google Gemini and
+  `AutoGettext.API.OpenAI` for ChatGPT.
   """
 
   @callback get(String.t()) :: String.t() | no_return()

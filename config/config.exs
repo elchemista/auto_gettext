@@ -5,6 +5,11 @@ config :auto_gettext,
   api_service: AutoGettext.API.Gemini,
   # API key used by the default Gemini implementation (falls back to GOOGLE_API_KEY env).
   api_key: System.get_env("GOOGLE_API_KEY"),
+  # OpenAI chat completions configuration.
+  openai_api_key: System.get_env("OPENAI_API_KEY"),
+  openai_model: "gpt-4o-mini",
+  openai_url: "https://api.openai.com/v1/chat/completions",
+  openai_temperature: 0.0,
   # Which translator Mix task should use by default.
   translator_module: AutoGettext.GeminiTranslator,
   # Locales that should not be touched (directories under priv/gettext/*).
