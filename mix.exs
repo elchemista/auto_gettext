@@ -5,7 +5,7 @@ defmodule AutoGettext.MixProject do
     [
       app: :auto_gettext,
       name: "AutoGettext",
-      version: "0.1.0",
+      version: "0.1.1",
       elixir: "~> 1.16",
       deps: deps(),
       test_coverage: [tool: ExCoveralls],
@@ -48,10 +48,10 @@ defmodule AutoGettext.MixProject do
 
   defp deps do
     [
-      {:gettext, "~> 0.24"},
+      {:gettext, "~> 0.26"},
       {:jason, "~> 1.4"},
       {:httpoison, "~> 2.0"},
-      {:ex_doc, "~> 0.34", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.36", only: :dev, runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.18", only: :test},
       {:bypass, "~> 2.1", only: :test}
